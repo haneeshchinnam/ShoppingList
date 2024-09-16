@@ -4,7 +4,8 @@ import { ILoginResponse } from "../../interface/authentication";
 const initialState: ILoginResponse = {
     accessToken: null,
     refreshToken: null,
-    user: null
+    user: null,
+    auth: null,
 }
 
 // Define authentication slice
@@ -20,16 +21,22 @@ const authSlice = createSlice({
             localStorage.setItem('accessToken', user.accessToken || ''); // Store access token in localStorage
             localStorage.setItem('refreshToken', user.refreshToken || ''); // Store refresh token in localStorage
         },
+        setAccessToken: (state, action: PayloadAction<string | null>) => {
+            const user = action.payload;
+            state.accessToken = user;
+            localStorage.setItem('accessToken', user || ''); // Store access token in localStorage
+        },
         logout: (state) => {
             state.accessToken = null;
             state.refreshToken = null;
             state.user = null;
-            localStorage.removeItem('accessToken'); // Remove access token from localStorage
-            localStorage.removeItem('refreshToken'); // Remove refresh token from localStorage
+        },
+        setRefresh: (state, action: PayloadAction<boolean | null>) => {
+            state.auth = action.payload
         }
     }
 });
 
 // Export actions and reducer
-export const { setAuthProfile, logout } = authSlice.actions;
+export const { setAuthProfile, logout, setAccessToken, setRefresh } = authSlice.actions;
 export default authSlice.reducer;

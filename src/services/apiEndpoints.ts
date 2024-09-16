@@ -2,7 +2,8 @@ export const API_ENDPOINTS = {
     session: {
       refreshToken: '/api/auth/refresh',
       login: '/api/auth/login',
-      register: '/api/auth/register'
+      register: '/api/auth/register',
+      verify: '/api/auth/verify'
     },
     product: {
       products: '/api/products',

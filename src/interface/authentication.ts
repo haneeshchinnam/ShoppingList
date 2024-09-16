@@ -2,6 +2,7 @@ export interface ILoginResponse {
     accessToken: string | null;
     refreshToken: string | null;
     user: IUserResponse | null;
+    auth: boolean | null;
 }
 
 export interface IUser {

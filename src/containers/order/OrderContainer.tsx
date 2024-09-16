@@ -4,7 +4,7 @@ import { IOrder } from '../../interface/order';
 import ProductCard from '../../components/dashboard/ProductCard';
 
 const OrderContainer = () => {
-    const { data: orderData } = useGetOrdersQuery();
+    const { data: orderData } = useGetOrdersQuery(undefined, { refetchOnMountOrArgChange: true });
     const [order, setOrder] = useState<IOrder[]>([]);
 
     useEffect(() => {

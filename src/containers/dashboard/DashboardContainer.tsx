@@ -10,7 +10,7 @@ const DashboardContainer = () => {
   const [products, setProducts] = useState<
     { id: string; name: string; price: number; quantity: number; categoryName: string }[]
   >([]);
-  const { data: productList, refetch } = useGetProductsQuery();
+  const { data: productList, refetch } = useGetProductsQuery(undefined,{ refetchOnMountOrArgChange: true });
   const { data: categoryList, refetch: refetchCategory } = useGetCategoriesQuery();
   const [ addCart ] = useUpdateCartMutation();
 

@@ -1,16 +1,33 @@
-import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "./store";
 import { IRouteConfig } from "./interface";
 import { publicRoutes, privateRoutes, AppPath } from "./routes";
+import { useVerifyQuery } from "./services";
 
 function App() {
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.accessToken !== null
   );
+  const auth = useSelector(
+    (state: RootState) => state.auth.auth !== null
+  );
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { data } = useVerifyQuery(undefined, { skip: isAuthenticated });
+  
 
-  const presistedPath = AppPath.login;
+
+  const presistedPath = location.pathname;
+
+  useEffect(() => {
+    if (auth) {
+      navigate(AppPath.login);
+    }
+  }, [auth])
+
+  
 
   const isPublicRoute = (pathname: string) => {
     return publicRoutes.some((route) => pathname.startsWith(route.path));
@@ -43,14 +60,14 @@ function App() {
       if (isPublicRoute(route.path)) {
         return getRoute();
       } else {
-        if (isAuthenticated) {
+        if (isAuthenticated || ( data?.isAuthenticated ?? false)) {
           return getRoute();
         } else {
           return (
             <Route
               key="catch-all"
               path="*"
-              element={<Navigate to={presistedPath} />}
+              element={<Navigate to={auth ? AppPath.login : presistedPath} />}
             />
           );
         }
@@ -68,7 +85,7 @@ function App() {
           path="*"
           element={
             <Navigate
-              to={isAuthenticated ? AppPath.dashboard : AppPath.login}
+              to={(isAuthenticated && (data?.isAuthenticated ?? false)) ? presistedPath : AppPath.login}
               replace
             />
           }

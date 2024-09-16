@@ -17,8 +17,11 @@ const authenticationService = apiSlice.injectEndpoints({
                 method: 'POST',
                 body: payload,
             })
+        }),
+        verify: builder.query<{ isAuthenticated: boolean }, void>({
+            query: () => API_ENDPOINTS.session.verify,
         })
     })
 })
 
-export const { useLoginMutation, useRegisterMutation } = authenticationService;
+export const { useLoginMutation, useRegisterMutation, useVerifyQuery } = authenticationService;
